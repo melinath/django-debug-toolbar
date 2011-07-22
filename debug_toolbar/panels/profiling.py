@@ -122,7 +122,7 @@ class FunctionCall(object):
         return 16 * self.depth
         
     def line_stats_text(self):
-        if self._line_stats_text is None:
+        if DJ_PROFILE_USE_LINE_PROFILER and self._line_stats_text is None:
             lstats = self.statobj.line_stats
             if self.func in lstats.timings:
                 out = StringIO()
@@ -185,7 +185,7 @@ class ProfilingDebugPanel(DebugPanel):
         func.has_subfuncs = False
         if func.depth < max_depth:
             for subfunc in func.subfuncs():
-                if subfunc.stats[3] >= cum_time or (subfunc.func in self.stats.line_stats.timings):
+                if subfunc.stats[3] >= cum_time or (DJ_PROFILE_USE_LINE_PROFILER and subfunc.func in self.stats.line_stats.timings):
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
     
